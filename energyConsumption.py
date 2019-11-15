@@ -9,6 +9,8 @@ rechargeMin = 0.8 #REFERENCE
 rechargeMax = 1
 KWH = 0.00545 # energy consumed by 1 hour of charging a phone REFERENCE
 
+# ***** Assumption: always charging to full from low charge state ******
+
 def batteryLife(numel=num_elements):
   # Generates phones with various battery lifes
   batteryInstance = np.asarray([np.random.uniform(batteryLifeMin,batteryLifeMax) for i in range(numel)])
@@ -16,7 +18,7 @@ def batteryLife(numel=num_elements):
   return batteryInstance
 
 def recharge(numel=num_elements):
-   # Generates phones with various recharging states
+   # Generates phones with various recharging states, example: 1 means phone is 0%
   recharge = np.asarray([np.random.uniform(rechargeMin,rechargeMax) for i in range(numel)])
  
   return recharge

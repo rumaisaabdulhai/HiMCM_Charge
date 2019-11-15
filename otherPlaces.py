@@ -1,14 +1,16 @@
+
+
 import numpy as np
 import compiling
 import random
 
-# FOOT TRAFFIC CONSTANTS (per day)
-malls = 2000*52
+# FOOT TRAFFIC CONSTANTS (customers per year per building)
+malls = 1000000*52 #Estimated value.
 airports = 782.85*52 
 schools = 2984.92*52 
 libraries = 3174.06*52 
-coffee_shops = 3333.33*52 
-gas_station = 2000*52;
+coffee_shops = 3333.33*52 #Estimated value.
+gas_station = 50000*52 #10,700 gas stations in the US (https://www.creditdonkey.com/gas-station-statistics.html), 40,000,000 people per day
 meanLowBattery = 0.05
 BatteryRange = 0.04
 
@@ -20,15 +22,19 @@ places_info = { "mall": (malls, 75195-500,75195+500), # avg hrs were 75195
                 "coffeeshop": (coffee_shops, 0.1, 1.5) }
 
 def placesCost(foot_traffic, hoursSpentMin, hoursSpentMax):
-  
+
   hours_spent = np.asarray([np.random.uniform(hoursSpentMin,hoursSpentMax) for x in range(foot_traffic)])
   lowBatteries = random.uniform(meanLowBattery-BatteryRange,meanLowBattery-BatteryRange)
 
-  s = np.sum(compiling.compileDataPlaces(foot_traffic, hoursout=hours_spent))
+  df = compiling.compileDataPlaces(foot_traffic, hoursout=hours_spent)
+  df["Hours Spent"] = hours_spent
+
+  s = np.sum(df.iloc[:,-1])
 
   yearlyCost = np.asarray([lowBatteries * s for i in range(foot_traffic)])
 
-  return yearlyCost
+
+  return yearlyCost, df
 
 
 def getPlace(key):
@@ -36,9 +42,21 @@ def getPlace(key):
   b = places_info[key][1]
   c = places_info[key][2]
 
-  yearlyCost = placesCost(a,b,c)
+  placeCost = placesCost(a,b,c)
+  yearlyCost = placeCost[0]
+  df = placeCost[1]
 
-  return yearlyCost
+  return yearlyCost, df
+
+def totalCost():
+  cost = []
+  for key in places_info:
+    place = getPlace(key)
+    cost.append(place[0])
+
+    df = place[1]
+    pd.DataFrame.to_csv(df, str(key)+".csv")
+
 
 """
 References:

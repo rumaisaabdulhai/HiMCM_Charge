@@ -3,6 +3,7 @@ import numpy as np
 import cost
 import energyConsumption
 import phoneUsage
+import random
 
 #numpy arrays (current day): recharge point, battery life, weekend usage per day, weeday usage per day, total energy consumption (per person), total cost (per person).
 
@@ -78,4 +79,4 @@ def compileDataPlaces(elements, hoursout=10):
     # stats = statistics(df)
     # pd.DataFrame.to_csv(stats, "SmartphoneCostPerPersonStats.csv")
 
-    return df.iloc[:,-1]
+    return df

@@ -4,12 +4,14 @@ import cost
 import compiling
 import carUsage
 import otherPlaces
+import compUsage
+import solarpower
 
 # def main(elements = 1000000):
 #   print(compiling.compileData(elements))
 
 if __name__ == '__main__':
-  print("main")
+  print(solarpower.getValue())
   # print(otherPlaces.getPlace("mall"))
 
 '''

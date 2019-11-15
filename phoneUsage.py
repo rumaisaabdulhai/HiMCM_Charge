@@ -15,14 +15,15 @@ max_percent = 0.05 # [1]
 # VARIABLES:
 avg_week_clicks = 30 # [1]
 val_range = 10 # chosen range
-hours_spent = 0 # number of hours someone spends outside on a weekend
+hours_spent = np.zeros((num_elements,1))
+hours_spent = hours_spent.fill(10) # number of hours someone spends outside on a weekend
 
 '''
 This method calculates the number of times 
 someone uses their phone on a weekend day.
 '''
 def weekend_picks(hours_spent):
-    x = 58 * np.divide(hours_spent,24) 
+    x = 58 * np.divide(hours_spent,24)
     # dividing by 24 to get the day ratio
     return x
 
@@ -31,20 +32,19 @@ This method calculates the number of times
 that a person looks at their phone on a weekday.
 '''
 
-def week_picks(num_elements, mode = 0, hours_spent=10):
+def week_picks(num_elements, mode = 0, h = hours_spent):
   if (mode == 0): # if weekday
     wp = np.asarray([random.uniform(avg_week_clicks-val_range, avg_week_clicks + val_range) for i in range(num_elements)])
     return wp
 
   # if time left over, move statement to weekend picks
   elif (mode == 1): # if weekend
-    y = random.uniform(weekend_picks(hours_spent)[i]- val_range, weekend_picks(hours_spent)[i] + val_range)
-    wp = np.asarray([ y for i in range(num_elements)])
+    picks = weekend_picks(h)
+    wp = np.asarray([random.uniform(weekend_picks(h)[i] - val_range, weekend_picks(h)[i] + val_range) for i in range(num_elements) ])
     return wp
 
   else:
     print("Invalid Day.")
-
 
 # Calculates required variables for calculating phone usage in a day
 
@@ -65,7 +65,7 @@ def med_time(num_elements, minrange = 2, maxrange = 10):
 '''
 This method calculates the maximum amount of time a person
 '''
-def max_time(num_elements, mu = 17, sigma = 5):
+def max_time(num_elements, mu = 17, sigma = 1):
   max_time = np.random.normal(mu, sigma, num_elements)
   return max_time
 
@@ -83,13 +83,12 @@ def phoneUsage(avgclicks, valrange, day, num_elements):
   c = np.multiply(week_pick,maxt) * max_percent
   
   P = a + b + c
-  
+
   return P
 
-
 # Main Functions of the Program:
-def weekday(num_elements=100):
-  return phoneUsage(avgclicks=avg_week_clicks, valrange=val_range, day=0, num_elements=num_elements)
+def weekday(num_elements = 100):
+  return phoneUsage( avgclicks = avg_week_clicks, valrange = val_range, day = 0, num_elements = num_elements)
 
-def weekend(hoursspent, num_elements=100):
-  return phoneUsage(avgclicks=np.average(weekend_picks(hoursspent)), valrange=val_range, day=1, num_elements=num_elements)
+def weekend(hours_spent, num_elements = 100):
+  return phoneUsage(avgclicks = np.average(weekend_picks(hours_spent)), valrange=val_range, day = 1, num_elements = num_elements)
