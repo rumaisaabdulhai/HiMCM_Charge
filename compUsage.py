@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 # need references for computers
 
-num_elements = 1000000
+num_elements = int(1000000 *0.73) # 73% of adults own laptops as of February 2019 https://www.statista.com/statistics/756054/united-states-adults-desktop-laptop-ownership/
 
 day_screen_time = 2.21
 # wh_per_hour = random.uniform(50,100)

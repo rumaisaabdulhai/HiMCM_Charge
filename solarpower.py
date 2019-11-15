@@ -1,24 +1,38 @@
 import numpy as np
 import random
-# raw array from reference: [[4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 20.0],
-#         [10402.0, 12389.0, 14228.0, 17898.0, 21305.0, 24696.0, 38858.0]]
 
-num_elements = 100
+# Specifies the number of elements desired for dataset
+num_elements = 1000000
 
-amount_of_kwh = np.asarray([np.random.uniform(4.0,20.0,num_elements)])
-cost_of_install = 0
-years = 100
-
-cost_of_install = (2093*amount_of_kwh) +(2.1*(10**-12))#Calculated from line of best fit from solar cell installation cost data(https://news.energysage.com/how-much-does-the-average-solar-panel-installation-cost-in-the-u-s/)
-
-
-kwhs = amount_of_kwh * years*365*24
-solar_cost_per_kwh = np.divide(total_solar_cost, kwhs)
-total_regular_cost = 0.12 * kwhs
+# This is the cost of electricity per kwh (unit of energy)
 regular_cost_per_kwh = 0.12
 
-difference_in_total_cost = np.subtract(total_regular_cost,total_solar_cost)
-difference_in_cost_per_kwh = np.subtract(regular_cost_per_kwh,solar_cost_per_kwh)
+# Average cost of solar panels based on system size (amount_of_kwh)
+amount_of_kwh = np.asarray([np.random.uniform(4.0, 20.0, num_elements)])
+
+# Using Mathematica, the line of best fit for the data on 
+# system size vs. solar cell installation cost was found
+cost_of_install = (2093 * amount_of_kwh) + (2.1 * (10 ** -12)) 
+# REF: https://news.energysage.com/how-much-does-the-average-solar-panel-installation-cost-in-the-u-s/
+
+years = 2093/(365*0.12*24) # Break even point (see doc for derivation.) REFERENCE
+
+total_solar_cost = cost_of_install # Assumption: The total solar cost only includes the installation expenses, and does include any maintenance expenses for the solar panels
+
+kwh = amount_of_kwh * 24 * 365 * years # the total energy, in kwh, that the solar cell will provide to the building in a year.
+solar_cost_per_kwh = np.divide(total_solar_cost, kwh)
+regular_cost_per_kwh = 0.12
+total_regular_cost = regular_cost_per_kwh * kwh
+
+difference_in_total_cost = np.subtract(total_regular_cost, total_solar_cost)
+print(difference_in_total_cost)
+
+difference_in_cost_per_kwh = np.subtract(regular_cost_per_kwh, solar_cost_per_kwh)
 
 def getValue():
-  return "difference in total cost: "+str(difference_in_total_cost)+" | difference in cost per kwh: "+str(difference_in_cost_per_kwh)
+  return "difference in total cost: " + str(difference_in_total_cost) + " | difference in cost per kwh: " + str(difference_in_cost_per_kwh)
+
+def getData():
+  df = pd.DataFrame({"Amount of KWH in solar cell":amount_of_kwh, "Solar Cell Installation Cost": total_solar_cost, "Total Energy Provided by the Cell":kwh,"Cost of Solar Cell per KWH": solar_cost_per_kwh, "Total Regular Cost":total_regular_cost, "Profit of Solar Cells (taking into account cost)":difference_in_total_cost, "Total cost of buying solar cells + Profit of having them per KWH": difference_in_cost_per_kwh})
+
+  

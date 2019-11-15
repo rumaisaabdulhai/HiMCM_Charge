@@ -15,7 +15,7 @@ meanLowBattery = 0.05
 BatteryRange = 0.04
 
 # totalFootTraffic = [mall, airport, school, library, coffee_shop]
-# Format for each of these tuples: (foot traffic per year, minimum time spent, maximum time spent), CHECK WHETHER FOOT TRAFFIC IS PER YEAR OR WEEK OR DAY
+# Format for each of these tuples: (foot traffic per year, minimum timed spent, maximum time spent), CHECK WHETHER FOOT TRAFFIC IS PER YEAR OR WEEK OR DAY
 places_info = { "mall": (malls, 75195-500,75195+500), # avg hrs were 75195
                 "airport": (airports, 3.00, 3.66), # avg hrs were 3.33
                 "library": (libraries, 1,5, 2.5), # avg hrs were 2
