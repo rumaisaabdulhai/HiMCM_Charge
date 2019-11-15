@@ -1,10 +1,11 @@
 import numpy as np
 import random
+import pandas as pd
 
 # Specifies the number of elements desired for dataset
 num_elements = 1000000
 
-# This is the cost of electricity per kwh (unit of energy)
+# Cost of electricity per kwh (unit of energy)
 regular_cost_per_kwh = 0.12
 
 # Average cost of solar panels based on system size (amount_of_kwh)
@@ -33,6 +34,5 @@ def getValue():
   return "difference in total cost: " + str(difference_in_total_cost) + " | difference in cost per kwh: " + str(difference_in_cost_per_kwh)
 
 def getData():
-  df = pd.DataFrame({"Amount of KWH in solar cell":amount_of_kwh, "Solar Cell Installation Cost": total_solar_cost, "Total Energy Provided by the Cell":kwh,"Cost of Solar Cell per KWH": solar_cost_per_kwh, "Total Regular Cost":total_regular_cost, "Profit of Solar Cells (taking into account cost)":difference_in_total_cost, "Total cost of buying solar cells + Profit of having them per KWH": difference_in_cost_per_kwh})
-
-  
+  data = {"Amount of KWH in solar cell": amount_of_kwh, "Solar Cell Installation Cost": total_solar_cost, "Total Energy Provided by the Cell":kwh, "Cost of Solar Cell per KWH": solar_cost_per_kwh, "Total Regular Cost": total_regular_cost, "Profit of Solar Cells (with cost)": difference_in_total_cost, "Profit of Solar Cells per KWH (with cost)": difference_in_cost_per_kwh}
+  pd.DataFrame.to_csv(pd.Series(data).to_frame(), "SolarEnergySolution.csv")

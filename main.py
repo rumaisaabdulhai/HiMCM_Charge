@@ -11,7 +11,7 @@ import solarpower
 #   print(compiling.compileData(elements))
 
 if __name__ == '__main__':
-  print(solarpower.getValue())
+  print(solarpower.getData())
   # print(otherPlaces.getPlace("mall"))
 
 '''

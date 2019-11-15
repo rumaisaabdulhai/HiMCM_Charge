@@ -1,16 +1,20 @@
-
-
 import numpy as np
 import compiling
 import random
 
-# FOOT TRAFFIC CONSTANTS (customers per year per building)
-malls = 1000000*52 #Estimated value.
-airports = 782.85*52 
-schools = 2984.92*52 
-libraries = 3174.06*52 
-coffee_shops = 3333.33*52 #Estimated value.
-gas_station = 50000*52 #10,700 gas stations in the US (https://www.creditdonkey.com/gas-station-statistics.html), 40,000,000 people per day
+##########################
+# FOOT TRAFFIC CONSTANTS #
+##########################
+
+# The customers per year per building (below) is acquired by multiplying 52 times the customers per week for each building.
+
+w = 52 # weeks in a year
+malls = 1000000 * w # Estimated value
+airports = 782.85 * w
+schools = 2984.92 * w
+libraries = 3174.06 * w
+coffee_shops = 3333.33 * w # Estimated value
+gas_station = 50000 * w # 10,700 gas stations in the US (https://www.creditdonkey.com/gas-station-statistics.html), 40,000,000 people per day
 meanLowBattery = 0.05
 BatteryRange = 0.04
 

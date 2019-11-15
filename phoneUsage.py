@@ -1,26 +1,28 @@
 import random
 import numpy as np
 
-'''
-Overview: This python file calculates the number 
-of hours someone spends on their phone on a weekend or weekday.
+''' 
+This python file calculates the number of hours someone spends on their phone on a weekend or weekday. 
 '''
 
-# CONSTANTS:
+#############
+# CONSTANTS #
+#############
 num_elements = 100 # Specifies the number of elements desired for dataset
 min_percent = 0.70 # [1]
 med_percent = 0.25 # [1]
 max_percent = 0.05 # [1]
 
-# VARIABLES:
+#############
+# VARIABLES #
+#############
 avg_week_clicks = 30 # [1]
 val_range = 10 # chosen range
 hours_spent = np.zeros((num_elements,1))
 hours_spent = hours_spent.fill(10) # number of hours someone spends outside on a weekend
 
 '''
-This method calculates the number of times 
-someone uses their phone on a weekend day.
+This method calculates the number of times someone uses their phone on a weekend day.
 '''
 def weekend_picks(hours_spent):
     x = 58 * np.divide(hours_spent,24)
