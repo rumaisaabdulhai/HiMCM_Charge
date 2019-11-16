@@ -1,6 +1,8 @@
 import numpy as np
 import compiling
 import random
+import compUsage
+import pandas as pd
 
 ##########################
 # FOOT TRAFFIC CONSTANTS #
@@ -9,12 +11,12 @@ import random
 # The customers per year per building (below) is acquired by multiplying 52 times the customers per week for each building.
 
 w = 52 # weeks in a year
-malls = 1000000 * w # Estimated value
+malls = 1000000 # Estimated value
 airports = 782.85 * w
 schools = 2984.92 * w
 libraries = 3174.06 * w
-coffee_shops = 3333.33 * w # Estimated value
-gas_station = 50000 * w # 10,700 gas stations in the US (https://www.creditdonkey.com/gas-station-statistics.html), 40,000,000 people per day
+coffee_shops = 3333.33 * w # for Starbucks at least.
+gas_station = 7700 * w # 122,552 gas stations in the US , 40,000,000 people per day (https://www.convenience.org/Research/FactSheets/ScopeofIndustry/Convenience)
 meanLowBattery = 0.05
 BatteryRange = 0.04
 
@@ -25,8 +27,9 @@ places_info = { "mall": (malls, 75195-500,75195+500), # avg hrs were 75195
                 "library": (libraries, 1,5, 2.5), # avg hrs were 2
                 "coffeeshop": (coffee_shops, 0.1, 1.5) }
 
-def placesCost(foot_traffic, hoursSpentMin, hoursSpentMax):
+def PlacesCostSmartphones(foot_traffic, hoursSpentMin, hoursSpentMax):
 
+  foot_traffic = int(foot_traffic)
   hours_spent = np.asarray([np.random.uniform(hoursSpentMin,hoursSpentMax) for x in range(foot_traffic)])
   lowBatteries = random.uniform(meanLowBattery-BatteryRange,meanLowBattery-BatteryRange)
 
@@ -41,26 +44,57 @@ def placesCost(foot_traffic, hoursSpentMin, hoursSpentMax):
   return yearlyCost, df
 
 
-def getPlace(key):
+def PlacesCostComputers(foot_traffic):
+
+  df = compUsage.getData(foot_traffic)
+  s = np.sum(df.iloc[:,-1])
+
+  yearlyCost = s
+
+  return yearlyCost, df
+
+
+def getPlace(key, mode=True):
   a = places_info[key][0]
   b = places_info[key][1]
   c = places_info[key][2]
 
-  placeCost = placesCost(a,b,c)
-  yearlyCost = placeCost[0]
-  df = placeCost[1]
+  if mode == True: # you're working with smartphones
+    placeCost = PlacesCostSmartphones(a,b,c)
+    yearlyCost = placeCost[0]
+    df = placeCost[1]
+    return yearlyCost, df
+  
+  else: # you're working with computers
 
-  return yearlyCost, df
+    placeCost = PlacesCostComputers(a)
+    yearlyCost = placeCost[0]
+    df = placeCost[1]
+    return yearlyCost, df
 
-def totalCost():
+
+def totalCost(mode=True):
   cost = []
-  for key in places_info:
-    place = getPlace(key)
-    cost.append(place[0])
 
-    df = place[1]
-    pd.DataFrame.to_csv(df, str(key)+".csv")
+  if mode == True: # you're working with smartphones
+    for key in places_info:
+      place = getPlace(key)
+      cost.append(place[0])
 
+      df = place[1]
+      pd.DataFrame.to_csv(df, str(key)+".csv")
+    
+    return cost
+
+  else: # you're working with computers
+    for key in places_info:
+      place = getPlace(key, mode=False)
+      cost.append(place[0])
+
+      df = place[1]
+      pd.DataFrame.to_csv(df, str(key)+ "2.csv")
+    
+    return cost
 
 """
 References:
