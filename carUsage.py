@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
 
-# CONSTANTS:
-chargingStations = 20021 # Number of electric car charging stations in US from survey as of August 2019 (see References)
+#############
+# CONSTANTS #
+#############
 
+chargingStations = 20021 # Number of electric car charging stations in US from survey as of August 2019 (see References)
 num_elements = 1000000 #Estimated number of electric vehicles in US, REFERENCE: https://www.eei.org/resourcesandmedia/newsroom/Pages/Press%20Releases/EEI%20Celebrates%201%20Million%20Electric%20Vehicles%20on%20U-S-%20Roads.aspx
 
 mu_1 = 13476/365
