@@ -2,6 +2,10 @@ import numpy as np
 import random
 import pandas as pd
 
+#############
+# CONSTANTS #
+#############
+
 # Specifies the number of elements desired for dataset
 num_elements = 1000000
 
@@ -9,7 +13,7 @@ num_elements = 1000000
 regular_cost_per_kwh = 0.12
 
 # Average cost of solar panels based on system size (amount_of_kwh)
-amount_of_kwh = np.asarray([np.random.uniform(4.0, 20.0, num_elements)])
+amount_of_kwh = np.asarray([random.uniform(4.0, 20.0) for i in range(num_elements)])
 
 # Using Mathematica, the line of best fit for the data on 
 # system size vs. solar cell installation cost was found
@@ -26,13 +30,22 @@ regular_cost_per_kwh = 0.12
 total_regular_cost = regular_cost_per_kwh * kwh
 
 difference_in_total_cost = np.subtract(total_regular_cost, total_solar_cost)
-print(difference_in_total_cost)
 
 difference_in_cost_per_kwh = np.subtract(regular_cost_per_kwh, solar_cost_per_kwh)
 
 def getValue():
   return "difference in total cost: " + str(difference_in_total_cost) + " | difference in cost per kwh: " + str(difference_in_cost_per_kwh)
 
-def getData():
-  data = {"Amount of KWH in solar cell": amount_of_kwh, "Solar Cell Installation Cost": total_solar_cost, "Total Energy Provided by the Cell":kwh, "Cost of Solar Cell per KWH": solar_cost_per_kwh, "Total Regular Cost": total_regular_cost, "Profit of Solar Cells (with cost)": difference_in_total_cost, "Profit of Solar Cells per KWH (with cost)": difference_in_cost_per_kwh}
-  pd.DataFrame.to_csv(pd.Series(data).to_frame(), "SolarEnergySolution.csv")
+def data():
+  print(np.transpose(amount_of_kwh))
+  data = {"Amount of KWH in solar cell": amount_of_kwh, 
+  "Solar Cell Installation Cost": total_solar_cost, 
+  "Total Energy Provided by the Cell":kwh, 
+  "Cost of Solar Cell per KWH": solar_cost_per_kwh, 
+  "Total Regular Cost": total_regular_cost, 
+  "Profit of Solar Cells (with cost)": difference_in_total_cost, 
+  "Profit of Solar Cells per KWH (with cost)": difference_in_cost_per_kwh}
+
+  df = pd.DataFrame(data)
+  pd.DataFrame.to_csv(df, "SolarEnergySolution.csv")
+  return df
