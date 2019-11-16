@@ -11,8 +11,8 @@ import solarpower
 #   print(compiling.compileData(elements))
 
 if __name__ == '__main__':
-  print(solarpower.getData())
-  # print(otherPlaces.getPlace("mall"))
+  # print(otherPlaces.totalCost(mode=False))
+  print(compUsage.data())
 
 '''
 Please copy/paste this link to find online references used:
