@@ -2,7 +2,10 @@ import numpy as np
 import phoneUsage
 import energyConsumption
 
-#CONSTANTS
+#############
+# CONSTANTS #
+#############
+
 avg_KWH_cost = 0.12
 
 def kwh_cost(elements, min = 0.08, max = 0.16):
