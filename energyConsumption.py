@@ -1,7 +1,10 @@
 import numpy as np
 import phoneUsage
 
-# CONSTANTS:
+#############
+# CONSTANTS #
+#############
+
 num_elements = 100
 batteryLifeMin = 3.58 # min hours for a smartphone battery life, defined from REFERENCE
 batteryLifeMax = 4.51 # max hours for a smartphone battery life, defined from REFERENCE
