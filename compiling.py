@@ -5,25 +5,33 @@ import energyConsumption
 import phoneUsage
 import random
 
-#numpy arrays (current day): recharge point, battery life, weekend usage per day, weeday usage per day, total energy consumption (per person), total cost (per person).
+#############
+# CONSTANTS #
+#############
 
-adultPhones = int(39.56*1000000*0.55*0.81)
+num_elements = 1000000
+per_of_adults = 0.55 # [1] Percentage of population that are adults
+adult_phones = 0.81 # [2] Percentage of adult population that owns phones
+weeks_in_year = 365.25/7 # Number of weeks in a year ~= 52
 
-# def statistics(DataFrame):
-#   stats = np.zeros(1,67)
-#   for i in range(67):
+'''
+This method calculates energy consumption in KWH and yearly cost in dollars for each person.
+'''
+def compileData(elements, hoursout):
+  elements = int(elements * per_of_adults * adult_phones)
+  global weeks_in_year
 
-def compileData(elements, hoursout=10):
-  if hoursout == 10:
+  # weekend
+  if hoursout.all() == None:
     hoursout = np.asarray([random.uniform(0,10) for i in range(elements)])
-    #People typically spend 0-10 hours outside of home on the weekends.
+    # People typically spend 0-10 hours outside of home on the weekends.
 
-  for i in range(adultPhones):
-    weekday = phoneUsage.weekday(numel=elements)
-    weekend = phoneUsage.weekend(hoursspent=hoursout, numel=elements)
+  for i in range(elements):
+    weekday = phoneUsage.a_weekday(elements)
+    weekend = phoneUsage.a_weekend(hours_spent=hoursout, num_elements=elements)
 
-    recharge = energyConsumption.recharge(elements)
-    battery = energyConsumption.batteryLife(elements)
+    recharge = energyConsumption.rechargeInstances(elements)
+    battery = energyConsumption.batteryInstances(elements)
 
     weekendUsageDay = energyConsumption.usageDay(weekend, battery, recharge)
     weekdayUsageDay = energyConsumption.usageDay(weekday, battery, recharge)
@@ -31,52 +39,25 @@ def compileData(elements, hoursout=10):
     totalConsumption = energyConsumption.energyConsumption(weekdayUsageDay, weekendUsageDay, battery)
     
     weeklyCost = cost.cost(totalConsumption)
-    yearlyCost = weeklyCost*52
+    yearlyCost = weeklyCost * weeks_in_year
 
-    data = {"Recharging Point": recharge, "Battery Life": battery, "Weekend Usage (per day)": weekendUsageDay,
-              "Weekday Usage (per day)": weekdayUsageDay, "Total Energy Consumption (per person)": totalConsumption,
-              "Total Yearly Cost (per person)": yearlyCost}
-
-    header = {"Recharging Point", "Battery Liefe", "Weekend Usage (per day)", "Weekday Usage (per day)",
-                "Total Energy Consumption (per person)", "Total Cost (per person)"}
+    data = { "Recharging Point": recharge,
+             "Battery Life": battery, 
+             "Weekend Usage (per day)": weekendUsageDay,
+             "Weekday Usage (per day)": weekdayUsageDay,
+             "Total Energy Consumption (per person)": totalConsumption,
+             "Total Yearly Cost (per person)": yearlyCost }
 
     df = pd.DataFrame(data)
-    print("Done!")
     pd.DataFrame.to_csv(df, "SmartphoneCostPerPerson.csv")
-
-    # stats = statistics(df)
-    # pd.DataFrame.to_csv(stats, "SmartphoneCostPerPersonStats.csv")
     return df
 
-def compileDataPlaces(elements, hoursout=10):
-  if (hoursout.all() == 10):
-    hoursout = np.asarray([random.uniform(0,10) for i in range(elements)])
-    #People typically spend 0-10 hours outside of home on the weekends.
+##############
+# REFERENCES #
+##############
 
-  for i in range(adultPhones):
+"""
+[1]:https://www.census.gov/quickfacts/fact/table/US/PST045218
+[2]:https://www.pewresearch.org/internet/fact-sheet/mobile/
 
-    weekend = phoneUsage.weekend(hoursspent=hoursout, numel=elements)
-
-    recharge = energyConsumption.recharge(elements)
-    battery = energyConsumption.batteryLife(elements)
-
-    weekendUsageDay = energyConsumption.usageDay(weekend,battery, recharge)
-  
-    totalConsumption = energyConsumption.energyConsumptionPlaces(weekendUsageDay, battery=battery)
-    
-    weeklyCost = cost.cost(totalConsumption)
-    yearlyCost = weeklyCost*52
-
-    data = {"Recharging Point": recharge, "Battery Life": battery, "Weekend Usage (per day)": weekendUsageDay, "Total Energy Consumption (per person)": totalConsumption, "Total Yearly Cost (per person)": yearlyCost}
-
-    header = {"Recharging Point", "Battery Liefe", "Weekend Usage (per day)", "Weekday Usage (per day)",
-                "Total Energy Consumption (per person)", "Total Cost (per person)"}
-
-    df = pd.DataFrame(data)
-    print("Done!")
-    pd.DataFrame.to_csv(df, "SmartphoneCostPerPersonTest.csv")
-
-    # stats = statistics(df)
-    # pd.DataFrame.to_csv(stats, "SmartphoneCostPerPersonStats.csv")
-
-    return df
+"""
