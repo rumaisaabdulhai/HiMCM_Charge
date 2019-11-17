@@ -10,3 +10,7 @@ df.plot(kind='scatter',x="Total Energy Consumption (per person)",y="Total Yearly
 # compiling.compileData(1000000,10)["Total Energy Consumption (per person)", "Total Yearly Cost (per person)"].plot(kind = 'scatter', x = "Total Energy Consumption (per person)", y = "Total Yearly Cost (per person)",color='red')
 # plt.savefig("data.png")
 plt.show()
+
+##############
+# REFERENCES #
+##############
