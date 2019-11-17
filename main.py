@@ -3,16 +3,12 @@ import energyConsumption
 import cost
 import compiling
 import carUsage
-import otherPlaces
+import otherPlace
 import compUsage
-import solarpower
+import solarPower
 
-# def main(elements = 1000000):
-#   print(compiling.compileData(elements))
-
-if __name__ == '__main__':
-  # print(otherPlaces.totalCost(mode=False))
-  print(compUsage.data())
+# if __name__ == '__main__':
+  # print(compUsage.data())
 
 '''
 Please copy/paste this link to find online references used:
