@@ -9,26 +9,31 @@ import random
 # CONSTANTS #
 #############
 
-num_elements = 1000000
+num_elements = 100.0
 per_of_adults = 0.55 # [1] Percentage of population that are adults
 adult_phones = 0.81 # [2] Percentage of adult population that owns phones
 weeks_in_year = 365.25/7 # Number of weeks in a year ~= 52
 
-'''
-This method calculates energy consumption in KWH and yearly cost in dollars for each person.
-'''
-def compileData(elements, hoursout):
-  elements = int(elements * per_of_adults * adult_phones)
-  global weeks_in_year
+hours_spent = np.full((int(num_elements),), 10)
 
-  # weekend
-  if hoursout.all() == None:
-    hoursout = np.asarray([random.uniform(0,10) for i in range(elements)])
-    # People typically spend 0-10 hours outside of home on the weekends.
+###################
+# COMPUTE METHODS #
+###################
+
+def compileData(elements=num_elements, hoursout=hours_spent):
+  """
+  This method calculates energy consumption in KWH and yearly cost in dollars for each PERSON.
+  :param elements: int
+  :param hoursout: numpy array
+  :return: pandas dataframe
+  """
+
+  global weeks_in_year
+  elements = int(elements)
 
   for i in range(elements):
-    weekday = phoneUsage.a_weekday(elements)
-    weekend = phoneUsage.a_weekend(hours_spent=hoursout, num_elements=elements)
+    weekday = phoneUsage.a_weekday(num_elements=elements)
+    weekend = phoneUsage.a_weekend(hoursspent=hoursout, num_elements=elements)
 
     recharge = energyConsumption.rechargeInstances(elements)
     battery = energyConsumption.batteryInstances(elements)
@@ -37,12 +42,11 @@ def compileData(elements, hoursout):
     weekdayUsageDay = energyConsumption.usageDay(weekday, battery, recharge)
 
     totalConsumption = energyConsumption.energyConsumption(weekdayUsageDay, weekendUsageDay, battery)
-    
-    weeklyCost = cost.cost(totalConsumption)
-    yearlyCost = weeklyCost * weeks_in_year
+
+    yearlyCost = cost.cost(totalConsumption)
 
     data = { "Recharging Point": recharge,
-             "Battery Life": battery, 
+             "Battery Life": battery,
              "Weekend Usage (per day)": weekendUsageDay,
              "Weekday Usage (per day)": weekdayUsageDay,
              "Total Energy Consumption (per person)": totalConsumption,
@@ -51,6 +55,41 @@ def compileData(elements, hoursout):
     df = pd.DataFrame(data)
     pd.DataFrame.to_csv(df, "SmartphoneCostPerPerson.csv")
     return df
+
+def compileDataPlaces(elements, hoursout):
+    """
+    This method calculates energy consumption in KWH and yearly cost in dollars for each PLACE. Remember that hoursout
+    must have the same length as the interger value of elements.
+    :param elements: int
+    :param hoursout: numpy array
+    :return: pandas dataframe
+    """
+
+    global weeks_in_year
+    elements = int(elements)
+
+    for i in range(elements):
+        all_days = phoneUsage.a_weekend(hoursspent = hoursout, num_elements=elements)
+
+        recharge = energyConsumption.rechargeInstances(elements)
+        battery = energyConsumption.batteryInstances(elements)
+
+        usageDays = energyConsumption.usageDay(all_days, battery, recharge)
+
+        totalConsumption = energyConsumption.energyConsumption(usageDays, usageDays, battery)
+
+        weeklyCost = cost.cost(totalConsumption)
+        yearlyCost = weeklyCost * weeks_in_year
+
+        data = {"Recharging Point": recharge,
+                "Battery Life": battery,
+                "Phone Usage (per day))": usageDays,
+                "Total Energy Consumption (per person)": totalConsumption,
+                "Total Yearly Cost (per person)": yearlyCost}
+
+        df = pd.DataFrame(data)
+        pd.DataFrame.to_csv(df, "SmartphoneCostPerPerson.csv")
+        return df
 
 ##############
 # REFERENCES #
