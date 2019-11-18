@@ -6,19 +6,15 @@ import pandas as pd
 # CONSTANTS #
 #############
 
-# Specifies the number of elements desired for dataset
-num_elements = 1000000
-
-# Cost of electricity per kwh (unit of energy)
-regular_cost_per_kwh = 0.12
+num_elements = 1000000 # Specifies the number of elements desired for dataset
+regular_cost_per_kwh = 0.12 # [1] Cost of electricity per kwh (unit of energy) 
 
 # Average cost of solar panels based on system size (amount_of_kwh)
 amount_of_kwh = np.asarray([random.uniform(4.0, 20.0) for i in range(num_elements)])
 
 # Using Mathematica, the line of best fit for the data on 
 # system size vs. solar cell installation cost was found
-cost_of_install = (2093 * amount_of_kwh) + (2.1 * (10 ** -12)) 
-# REF: https://news.energysage.com/how-much-does-the-average-solar-panel-installation-cost-in-the-u-s/
+cost_of_install = (2093 * amount_of_kwh) + (2.1 * (10 ** -12)) # [2]
 
 years = 2093/(365*0.12*24) # Break even point (see doc for derivation.) REFERENCE
 
@@ -26,23 +22,29 @@ total_solar_cost = cost_of_install # Assumption: The total solar cost only inclu
 
 kwh = amount_of_kwh * 24 * 365 * years # the total energy, in kwh, that the solar cell will provide to the building in a year.
 solar_cost_per_kwh = np.divide(total_solar_cost, kwh)
-regular_cost_per_kwh = 0.12
 total_regular_cost = regular_cost_per_kwh * kwh
 
 difference_in_total_cost = np.subtract(total_regular_cost, total_solar_cost)
 
 difference_in_cost_per_kwh = np.subtract(regular_cost_per_kwh, solar_cost_per_kwh)
 
-'''
-This method calculates...
-'''
-def getValue():
+###################
+# COMPUTE METHODS #
+###################
+
+def variables():
+  """
+  Calculates differences in cost and differences in cost per kwh.
+  :return: String
+  """
   return "difference in total cost: " + str(difference_in_total_cost) + " | difference in cost per kwh: " + str(difference_in_cost_per_kwh)
 
-'''
-This method calculates...
-'''
+
 def data():
+  """
+  Calculates profit of installing solar cells and profit of solar cells per KWH (with cost) for each shop.
+  :return: DataFrame
+  """
   print(np.transpose(amount_of_kwh))
   data = {"Amount of KWH in solar cell": amount_of_kwh, 
   "Solar Cell Installation Cost": total_solar_cost, 
@@ -61,5 +63,9 @@ def data():
 ##############
 
 '''
+[1]: 
+
+[2]: System size vs. Solar cell Installation cost
+https://news.energysage com/how-much-does-the-average-solar-panel-installation-cost-in-the-u-s/
 
 '''
