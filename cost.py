@@ -1,4 +1,5 @@
 import numpy as np
+import random
 import phoneUsage
 import energyConsumption
 
@@ -6,20 +7,21 @@ import energyConsumption
 # CONSTANTS #
 #############
 
+usageDay = 0.625 # Times per day you charge your phone.
+e_yearly = 4.44938 # KWH
 avg_kwh_cost = 0.12
 
-'''
-This method calculates...
-'''
-def kwh_cost(elements, min = 0.08, max = 0.16):
-  avg_cost = np.asarray([random.uniform(min,max) for i in range(numel)])
+###################
+# COMPUTE METHODS #
+###################
 
-  return avg_cost
-
-'''
-This method calculates...
-'''
 def cost(totalConsumption, kwh_cost=avg_kwh_cost):
+  """
+  This method calculates the total cost per YEAR for each smartphone.
+  :param totalConsumption: numpy array
+  :param kwh_cost: float
+  :return: numpy array
+  """
 
   cost = totalConsumption*kwh_cost
   return cost
