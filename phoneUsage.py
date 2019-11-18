@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 ''' 
-This python file calculates the total time spent in minutes using the phone per day.
+This python file calculates the total time spent in minutes using the phone for one day.
 '''
 
 #############
@@ -19,8 +19,12 @@ max_percent = 0.05 # [1]
 #############
 
 avg_week_clicks = 30 # [1]
-val_range = 10 # chosen range
+clicks_deviation = 10
 hours_spent = np.full( (num_elements,1) , 10)
+
+###################
+# COMPUTE METHODS #
+###################
 
 def get_hours_spent(num_elements, mint = 0, maxt = 10):
   """
@@ -32,7 +36,7 @@ def get_hours_spent(num_elements, mint = 0, maxt = 10):
   :return: numpy array
   """
 
-  hoursspent = np.asarray([random.uniform(minx, maxy) for i in range(num_elements)])
+  hoursspent = np.asarray([random.uniform(mint, maxt) for i in range(num_elements)])
   return hoursspent
 
 def week_picks(num_elements, mode=True, h=hours_spent):
@@ -47,8 +51,8 @@ def week_picks(num_elements, mode=True, h=hours_spent):
   :return: numpy array (number of times phone was used for each sample)
   """
   if (mode == True): # if weekday
-    min = avg_week_clicks - val_range
-    max = avg_week_clicks + val_range
+    min = avg_week_clicks - clicks_deviation
+    max = avg_week_clicks + clicks_deviation
 
     wp = np.asarray([random.uniform(min, max) for i in range(num_elements)])
     return wp
@@ -83,10 +87,6 @@ def med_time(num_elements, minrange = 2, maxrange = 10):
   med_time = np.asarray([np.random.uniform(minrange,maxrange) for i in range(num_elements)])
   return med_time
 
-
-'''
-This method calculates the maximum amount of time a person
-'''
 def max_time(num_elements, mu = 17, sigma = 4):
   """
   This method calculates the maximum amount of time a person looks at their phone.
@@ -113,26 +113,32 @@ def phoneUsage(hoursspent, num_elements = 1, day = True):
   """
 
   week_pick = week_picks(num_elements=num_elements, mode=day, h=hoursspent)
-
   mint = min_time(num_elements)
   medt = med_time(num_elements)
   maxt = max_time(num_elements)
 
-  # seems like the two have different dimensions which makes no sense because num_elements should be the same throughout ikr 
-  
-  print("week_pick ", week_pick)
-  print("mint ", mint)
-
   a = np.multiply(week_pick,mint) * min_percent
   b = np.multiply(week_pick,medt) * med_percent
   c = np.multiply(week_pick,maxt) * max_percent
-  
-  P = a + b + c
+
+  P = np.add(np.add(a, b), c)
+
   return P
 
-# Main Functions of the Program:
-def a_weekday(num_elements=100):
-  return phoneUsage(hoursspent=hours_spent, day = True, num_elements = num_elements)
+'''
+**** Main Functions of the Program ****
+'''
+def a_weekday(hoursspent=hours_spent, num_elements=100):
+  return phoneUsage(hoursspent=hoursspent, day = True, num_elements = num_elements)
 
-def a_weekend(hours_spent, num_elements = 100):
-  return phoneUsage(hoursspent = hours_spent, day = False, num_elements = num_elements)
+def a_weekend(hoursspent, num_elements = 100):
+  return phoneUsage(hoursspent = hoursspent, day = False, num_elements = num_elements)
+
+##############
+# REFERENCES #
+##############
+
+'''
+[1]: Phone Usage data:
+https://blog.rescuetime.com/screen-time-stats-2018/
+'''
